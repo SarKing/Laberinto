@@ -1,124 +1,168 @@
 using System;
 
-public class Personaje : Partida{
+public class Personaje{
+    public int x = 0;
+    public int y = 0;
+    public char skin;
+    public bool win = false;
 
-    // Vida...
-    protected int x;
-    protected int y;
-    protected string skin;
 
-
-    public Personaje(int x, int y, string skin){
+    public Personaje(int x, int y, char skin){
         this.x = x;
         this.y = y;
         this.skin = skin;
-        WriteAt(skin, x, y);
     }
 
-    public void Mover(int x, int y){
-        // Eliminas al anterior personaje
+    public void Transportar(ref int x, ref int y){
+        // Transportar en esa direccion
+        
+        this.x = x;
+        this.y = y;
 
-        // Mueves el personaje a la nueva posicion
-        WriteAt(skin, this.x, this.y);
-    }
-
-    public void Teclas(){
-        switch (Console.ReadKey().Key){
-            case ConsoleKey.UpArrow:
-                if(HeroCanMove(0)){
-                    RemoveHero();
-                    this.y--;
-                    Mover(this.x, this.y);
-                }
-                    break;
-            case ConsoleKey.DownArrow:
-                if(HeroCanMove(2)){
-                    RemoveHero();
-                    this.y++;
-                    Mover(this.x, this.y);
-                }
-                    break; 
-            case ConsoleKey.LeftArrow:
-                if(HeroCanMove(3)){
-                    RemoveHero();
-                    this.x--;
-                    Mover(this.x,this.y);
-                }
-                    break;
-            case ConsoleKey.RightArrow:
-                if(HeroCanMove(1)){
-                    RemoveHero();
-                    this.x++;
-                    Mover(this.x, this.y);
-                }
-                    break;
+        try{
+            Partida.mapa[y,x] = skin;
+            Partida.PrintCanvas();
+        } catch(SystemException){
+            Console.WriteLine("Error, desbordamiento");
         }
     }
 
-    public void RemoveHero(){
-        WriteAt(".", this.x, this.y);
-    }
-
-
-    /* 0 -> top
+    /* 0 -> up
        1 -> right
-       2 -> bottom
+       2 -> down
        3 -> left
     */
-    protected bool HeroCanMove(int pos){
-
-        switch (pos){
+    public void Move(int dir){
+        // Mover en al direccion
+        switch(dir){
             case 0:
-                if(getY() - 1 <= 0){
-                    return false;
-                } else {
-                    return true;
+                try{
+                    Partida.mapa[y, x] = ' ';
+                    y--;
+                    Partida.mapa[y, x] = 'x';
+                    Partida.PrintCanvas();
+                } catch(SystemException){
+                    Console.WriteLine("Error, desbordamiento");
                 }
-                
+            break;
             case 1:
-                if(getX() + 1 >= WIDTH - 1){
-                    return false;
-                } else {
-                    return true;
-                }
-                
+                try{
+                    Partida.mapa[y, x] = ' ';
+                    x++;
+                    Partida.mapa[y, x] = 'x';
+                    Partida.PrintCanvas();
+                } catch (SystemException) {
+                    Console.WriteLine("Error, desbordamiento");
+                }    
+            break;
             case 2:
-                if(getY() + 1 >= HEIGHT - 1){
-                    return false;
-                } else {
-                    return true;
+                try{
+                    Partida.mapa[y, x] = ' ';
+                    y++;
+                    Partida.mapa[y, x] = 'x';
+                    Partida.PrintCanvas();
+                } catch (SystemException) {
+                    Console.WriteLine("Error, desbordamiento");
                 }
-                
+            break;
             case 3:
-                if(getX() - 1 <= 0){
-                    return false;
-                } else {
-                    return true;
+                try{
+                    Partida.mapa[y, x] = ' ';
+                    x--;
+                    Partida.mapa[y, x] = 'x';
+                    Partida.PrintCanvas();
+                } catch (SystemException) {
+                    Console.WriteLine("Error, desbordamiento");
                 }
-                
-            
-        }
-        if(getX() + 1 >= WIDTH || getX() - 1 <= 0){
-            return false;
-        } else if(getY() + 1 >= HEIGHT || getY() - 1 <= 0){
-            return false;
-        } else {
-            return true;
+            break;
         }
     }
 
+/* 0 -> up
+   1 -> right
+   2 -> down
+   3 -> left
+            */
 
-    public void setX(int x){
-        this.x = x;
-    }
-    public void setY(int y){
-        this.y = y;
+    public void Teclas() {
+        switch (Console.ReadKey().Key) {
+            case ConsoleKey.UpArrow:
+                if (HeroCanMove(0)) {
+                    Move(0);
+                }
+            break;
+            case ConsoleKey.DownArrow:
+                if (HeroCanMove(2)) {
+                    Move(2);
+                }
+            break;
+            case ConsoleKey.LeftArrow:
+                if (HeroCanMove(3)) {
+                    Move(3);
+                }
+            break;
+            case ConsoleKey.RightArrow:
+                if (HeroCanMove(1)) {
+                    Move(1);
+                }
+            break;
+        }
     }
 
-    public int getX(){
-        return x;
+    public void RemoveHero() {
+        Partida.mapa[y,x] = ' ';
     }
-    public int getY(){
-        return y;
+
+
+    /* 0 -> up
+       1 -> right
+       2 -> down
+       3 -> left
+                */
+    protected bool HeroCanMove(int dir) {
+        switch (dir) {
+            case 0:
+                int copyy = y;
+                copyy--;
+                if(Partida.mapa[copyy, x].Equals(' ')){
+                    return true;
+                } else if(Partida.mapa[copyy, x].Equals('0')){
+                    win = true;
+                    return false;
+                }
+                return false;
+            case 1:
+                int copyx = x;
+                copyx++;
+                if (Partida.mapa[y, copyx].Equals(' ')) {
+                    return true;
+                } else if (Partida.mapa[y, copyx].Equals('0')) {
+                    win = true;
+                    return false;
+                }
+                return false;
+            case 2:
+                copyy = y;
+                copyy++;
+                if (Partida.mapa[copyy, x].Equals(' ')) {
+                    return true;
+                } else if (Partida.mapa[copyy, x].Equals('0')) {
+                    win = true;
+                    return false;
+                }
+                return false;
+            case 3:
+                copyx = x;
+                copyx--;
+                if (Partida.mapa[y, copyx].Equals(' ')) {
+                    return true;
+                } else if (Partida.mapa[y, copyx].Equals('0')) {
+                    win = true;
+                    return false;
+                }
+                return false;
+            default:
+                return false;
+        }
     }
 }
