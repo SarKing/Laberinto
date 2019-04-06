@@ -21,6 +21,7 @@ public class Partida : Pantalla{
 
     public static void PrintCanvas(){
         Console.Clear();
+        
         for (int i = 0; i < 15; i++) {
             Console.WriteLine();
             for (int j = 0; j < 30; j++) {
