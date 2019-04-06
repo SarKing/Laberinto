@@ -1,8 +1,8 @@
 using System;
 
 public class Enemigo : Personaje{
-     
 
+    bool flag = false;
 
     public Enemigo(char skin, char arma, int maxVida, int damage, int x, int y) : base(skin, arma, maxVida, damage){
         this.x = x;
@@ -11,10 +11,21 @@ public class Enemigo : Personaje{
     }
 
     public void Movimiento(){
-        if(CanMove(1)){
+
+        
+        // Si no se puede mover hacia la derecha
+        if(!CanMove(1)){
+            flag = true;
+        } else if (!CanMove(3)){
+            flag = false;
+        }
+
+        if(flag == false){
             Move(1);
-        } else {
+        } else if (flag == true){    
             Move(3);
         }
+
+
     }   
 }

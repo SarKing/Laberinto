@@ -10,11 +10,10 @@ public class Personaje{
     protected char arma;
     protected bool vivo = true;
 
-
-    public Personaje(char skin, char arma, int maxVida, int damage){
+     public Personaje(char skin, char arma, int maxVida, int damage){
         this.skin = skin;
         this.arma = arma;
-        this.maxVida = maxVida;
+        this.maxVida = maxVida; 
         this.vida = maxVida;
         this.damage = damage;
     }
@@ -27,7 +26,7 @@ public class Personaje{
 
         try{
             Partida.mapa[y,x] = skin;
-            Partida.PrintCanvas();
+            
         } catch(SystemException){
             Console.WriteLine("Error, desbordamiento");
         }
@@ -48,7 +47,7 @@ public class Personaje{
                     Partida.mapa[y, x] = ' ';
                     y--;
                     Partida.mapa[y, x] = skin;
-                    Partida.PrintCanvas();
+                    
                 } catch(SystemException){
                     Console.WriteLine("Error, desbordamiento");
                 }
@@ -58,7 +57,7 @@ public class Personaje{
                     Partida.mapa[y, x] = ' ';
                     x++;
                     Partida.mapa[y, x] = skin;
-                    Partida.PrintCanvas();
+                    
                 } catch (SystemException) {
                     Console.WriteLine("Error, desbordamiento");
                 }    
@@ -68,7 +67,7 @@ public class Personaje{
                     Partida.mapa[y, x] = ' ';
                     y++;
                     Partida.mapa[y, x] = skin;
-                    Partida.PrintCanvas();
+                    
                 } catch (SystemException) {
                     Console.WriteLine("Error, desbordamiento");
                 }
@@ -78,7 +77,7 @@ public class Personaje{
                     Partida.mapa[y, x] = ' ';
                     x--;
                     Partida.mapa[y, x] = skin;
-                    Partida.PrintCanvas();
+                    
                 } catch (SystemException) {
                     Console.WriteLine("Error, desbordamiento");
                 }
